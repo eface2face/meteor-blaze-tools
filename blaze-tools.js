@@ -1,8 +1,9 @@
-var _ = require("lodash");
-var HTML = require("meteor-htmljs");
-var BlazeTools;
-var ToJSVisitor;
-var toJSLiteral;
+module.exports = function(Meteor) {
+  var _ = Meteor.underscore;
+  var HTML = Meteor.HTML;
+  var BlazeTools;
+  var ToJSVisitor;
+  var toJSLiteral;
 
 BlazeTools = {};
 
@@ -338,4 +339,5 @@ BlazeTools.parseStringLiteral = function (scanner) {
   var value = JSON.parse(jsonLiteral);
   return { text: text, value: value };
 };
-module.exports = BlazeTools;
+  Meteor.BlazeTools = BlazeTools;
+};
