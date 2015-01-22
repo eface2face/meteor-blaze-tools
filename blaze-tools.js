@@ -1,6 +1,8 @@
 var _ = require("lodash");
 var HTML = require("meteor-htmljs");
 var BlazeTools;
+var ToJSVisitor;
+var toJSLiteral;
 
 BlazeTools = {};
 
