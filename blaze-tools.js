@@ -1,4 +1,5 @@
 module.exports = function(Meteor) {
+  var toObjectLiteralKey;
   var _ = Meteor.underscore;
   var HTML = Meteor.HTML;
   var BlazeTools;
@@ -272,6 +273,22 @@ BlazeTools.parseIdentifierName = function (scanner) {
   return scanner.input.substring(startPos, scanner.pos);
 };
 
+BlazeTools.parseExtendedIdentifierName = function (scanner) {
+  // parse an identifier name optionally preceded by '@'
+  if (scanner.peek() === '@') {
+    scanner.pos++;
+    var afterAt = BlazeTools.parseIdentifierName(scanner);
+    if (afterAt) {
+      return '@' + afterAt;
+    } else {
+      scanner.pos--;
+      return null;
+    }
+  } else {
+    return BlazeTools.parseIdentifierName(scanner);
+  }
+};
+
 BlazeTools.parseStringLiteral = function (scanner) {
   var startPos = scanner.pos;
   var rest = scanner.rest();
@@ -331,7 +348,7 @@ BlazeTools.parseStringLiteral = function (scanner) {
     }
   }
 
-  if (match[0] !== quote)
+  if (! match || match[0] !== quote)
     scanner.fatal("Unterminated string literal");
 
   jsonLiteral += '"';
